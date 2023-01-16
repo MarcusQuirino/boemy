@@ -55,6 +55,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    partys        Party[]
+    isAdminOF     Party[] @relation(name: "is-admin")
 }
 
 model VerificationToken {
@@ -63,4 +65,18 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Party {
+    id String @id @default(cuid())
+    userId String
+    admin User @relation(fields: [userId], references: [id], onDelete: Cascade, name: "is-admin")
+    name String
+    members User[] 
+    date DateTime 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    address String
+    minorsAllowed Boolean
+    description String
 }
